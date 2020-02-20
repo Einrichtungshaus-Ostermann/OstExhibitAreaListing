@@ -32,18 +32,18 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
         $koje = $this->Request()->getParam('koje');
 
         $qb = Shopware()->Models()->getDBALQueryBuilder();
-        $parameter = $qb->createNamedParameter($koje);
 
         $articles = $qb
             ->from('s_articles_details', 'details')
             ->innerJoin('details', 's_articles_attributes', 'attr', 'details.id = attr.articledetailsID')
             ->select('*')
             ->where($qb->expr()->orX(
-                $qb->expr()->like('attr.attr21', $parameter),
-                $qb->expr()->like('attr.attr21', '"%,' . $parameter . '"'),
-                $qb->expr()->like('attr.attr21', '"' . $parameter . ',%"'),
-                $qb->expr()->like('attr.attr21', '"%,' . $parameter . ',%"')
+                $qb->expr()->like('attr.attr21', $qb->createNamedParameter($koje)),
+                $qb->expr()->like('attr.attr21',  $qb->createNamedParameter('%,' .$koje)),
+                $qb->expr()->like('attr.attr21', $qb->createNamedParameter($koje . ',%')),
+                $qb->expr()->like('attr.attr21', $qb->createNamedParameter('%,' . $koje . ',%'))
             ))
+            ->groupBy('details.ordernumber')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC)
         ;
