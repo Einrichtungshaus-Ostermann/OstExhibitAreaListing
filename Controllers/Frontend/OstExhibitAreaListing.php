@@ -39,7 +39,7 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
             ->select('*')
             ->where($qb->expr()->orX(
                 $qb->expr()->like('attr.attr21', $qb->createNamedParameter($koje)),
-                $qb->expr()->like('attr.attr21',  $qb->createNamedParameter('%,' .$koje)),
+                $qb->expr()->like('attr.attr21', $qb->createNamedParameter('%,' . $koje)),
                 $qb->expr()->like('attr.attr21', $qb->createNamedParameter($koje . ',%')),
                 $qb->expr()->like('attr.attr21', $qb->createNamedParameter('%,' . $koje . ',%'))
             ))
@@ -50,7 +50,9 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
 
         $legacyStructConverter = Shopware()->Container()->get('legacy_struct_converter');
         $listProductService = Shopware()->Container()->get('shopware_storefront.list_product_service');
-        $productContext = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $config = Shopware()->Container()->get('ost_exhibit_area_listing.configuration');
+        $productContext = $contextService->getProductContext();
 
         if ($productContext === null) {
             throw new Enlight_Controller_Exception('ProductContext is null');
@@ -63,11 +65,40 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
             $products[$article['ordernumber']] = $legacyStructConverter->convertListProductStruct($product);
         }
 
+        $headline = 'Artikel der Koje "' . $koje . '"';
+        if (count($products) === 0) {
+            $headline = 'Es wurden keine Artikel für die Koje "' . $koje . '" gefunden';
+        }
 
-        $this->View()->assign('sCategoryContent', [
-            'cmsheadline' => 'Artikel der Koje: ' . $koje
-        ]);
-        $this->View()->assign('sArticles', $products);
-        $this->View()->assign('showListing', true);
+        $this->View()->assign([
+            // default data
+            'sBanner'                          => [],
+            'sBreadcrumb'                      => [],
+            'emotions'                         => [],
+            'hasEmotion'                       => false,
+            'showListing'                      => true,
+            'showListingDevices'               => [0, 1, 2, 3, 4],
+            'isHomePage'                       => false,
+            'criteria'                         => null,
+            'facets'                           => [],
+            'sPage'                            => 1,
+            'pageIndex'                        => 1,
+            'pageSizes'                        => [100],
+            'sPerPage'                         => 100,
+            'sTemplate'                        => null,
+            'sortings'                         => [],
+            'sNumberArticles'                  => count($products),
+            'sArticles'                        => $products,
+            'shortParameters'                  => $this->get('query_alias_mapper')->getQueryAliases(),
+            'sSort'                            => null,
+
+            // additional parameters
+            'sCategoryContent' => [
+                'cmsheadline'      => $headline,
+                'id'               => $contextService->getShopContext()->getShop()->getCategory()->getId(),
+                'productBoxLayout' => 'basic'
+            ]
+        ])
+        ;
     }
 }

@@ -10,6 +10,10 @@
  *
  * 1.0.1
  * - fix query generation
+ *
+ * 1.0.2
+ * - use basic listing
+ *
  * @package   OstExhibitAreaListing
  *
  * @author    Tim Windelschmidt <tim.windelschmidt@fionera.de>
