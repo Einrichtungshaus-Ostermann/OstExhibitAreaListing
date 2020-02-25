@@ -62,6 +62,10 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
         foreach ($articles as $article) {
             $product = $listProductService->get($article['ordernumber'], $productContext);
 
+            if ($product === null) {
+                continue;
+            }
+
             $products[$article['ordernumber']] = $legacyStructConverter->convertListProductStruct($product);
         }
 

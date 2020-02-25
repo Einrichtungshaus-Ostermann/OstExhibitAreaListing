@@ -14,6 +14,9 @@
  * 1.0.2
  * - use basic listing
  *
+ * 1.0.3
+ * - fix null pointer
+ *
  * @package   OstExhibitAreaListing
  *
  * @author    Tim Windelschmidt <tim.windelschmidt@fionera.de>
