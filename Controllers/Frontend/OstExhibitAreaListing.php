@@ -69,9 +69,9 @@ class Shopware_Controllers_Frontend_OstExhibitAreaListing extends Enlight_Contro
             $products[$article['ordernumber']] = $legacyStructConverter->convertListProductStruct($product);
         }
 
-        $headline = 'Artikel der Koje "' . $koje . '"';
+        $headline = 'Alle Artikel der Themenwelt';
         if (count($products) === 0) {
-            $headline = 'Es wurden keine Artikel für die Koje "' . $koje . '" gefunden';
+            $headline = 'Es wurden keine Artikel für die Themenwelt gefunden';
         }
 
         $this->View()->assign([

@@ -17,6 +17,9 @@
  * 1.0.3
  * - fix null pointer
  *
+ * 1.0.4
+ * - Change Listing headline
+ *
  * @package   OstExhibitAreaListing
  *
  * @author    Tim Windelschmidt <tim.windelschmidt@fionera.de>
